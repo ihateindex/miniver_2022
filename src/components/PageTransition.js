@@ -6,7 +6,7 @@ const animationConfiguration = {
 };
 const PageTransition = ({ children }) => {
     return (
-            <motion.div variants={animationConfiguration} initial="initial" animate="animate" exit="exit" transition={{ duration: 3 }}>
+            <motion.div variants={animationConfiguration} initial="initial" animate="animate" exit="exit" transition={{ duration: 1 }}>
                 {children}
             </motion.div>
     );

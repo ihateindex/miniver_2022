@@ -19,6 +19,7 @@ function Project(props) {
     let dispatch = useDispatch();
     const [projectData, setProjectData] = useState([]);
     const [categoryData, setCategoryData] = useState([]);
+    const [transitionMode, setTransitionMode] = useState('motion');
     useEffect(() => {
         let cate = '';
         if (location.hash) {
@@ -65,31 +66,61 @@ function Project(props) {
     };
 
     return (
-        // <motion.div className="Project" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ ease: 'easeIn', duration: 0.7 }}>
-        // <motion.div className="Project" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <PageTransition>
-                <div id="container" className={props.pageName}>
-                    {/* <Header color="black"/> */}
-                    <div className="contents">
-                        <div className="grid-inner">
-                            <h1 className="page-title">Project</h1>
-                            <div className="categories">
-                                <CategoryItem classActive={location.hash.split('#')[1] == 'all' || !location.hash ? 'isActive' : ''} item={{ idx: 'all', category_name: 'All' }} onClick={cateClick} />
-                                {categoryData.map((item) => (
-                                    <CategoryItem key={item.idx} classActive={location.hash.split('#')[1] == `${item.idx}` ? 'isActive' : ''} item={item} onClick={cateClick} />
-                                ))}
-                            </div>
-                            <div className="workbox-container">
-                                {projectData.map((item) => (
-                                    <WorkBox key={item.idx} item={item} desc={true} />
-                                ))}
+        <>
+            {transitionMode === 'motion' ? (
+                <PageTransition>
+                    <div id="container" className={props.pageName}>
+                        <div className="contents">
+                            <div className="grid-inner">
+                                <h1 className="page-title">Project</h1>
+                                <div className="categories">
+                                    <CategoryItem
+                                        classActive={location.hash.split('#')[1] == 'all' || !location.hash ? 'isActive' : ''}
+                                        item={{ idx: 'all', category_name: 'All' }}
+                                        onClick={cateClick}
+                                    />
+                                    {categoryData.map((item) => (
+                                        <CategoryItem key={item.idx} classActive={location.hash.split('#')[1] == `${item.idx}` ? 'isActive' : ''} item={item} onClick={cateClick} />
+                                    ))}
+                                </div>
+                                <div className="workbox-container">
+                                    {projectData.map((item) => (
+                                        <WorkBox key={item.idx} item={item} desc={true} />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {/* </motion.div> */}
-                <Outlet />
-            </PageTransition>
+                    <Outlet />
+                </PageTransition>
+            ) : (
+                <>
+                    <div id="container" className={props.pageName}>
+                        <div className="contents">
+                            <div className="grid-inner">
+                                <h1 className="page-title">Project</h1>
+                                <div className="categories">
+                                    <CategoryItem
+                                        classActive={location.hash.split('#')[1] == 'all' || !location.hash ? 'isActive' : ''}
+                                        item={{ idx: 'all', category_name: 'All' }}
+                                        onClick={cateClick}
+                                    />
+                                    {categoryData.map((item) => (
+                                        <CategoryItem key={item.idx} classActive={location.hash.split('#')[1] == `${item.idx}` ? 'isActive' : ''} item={item} onClick={cateClick} />
+                                    ))}
+                                </div>
+                                <div className="workbox-container">
+                                    {projectData.map((item) => (
+                                        <WorkBox key={item.idx} item={item} desc={true} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <Outlet />
+                </>
+            )}
+        </>
     );
 }
 
