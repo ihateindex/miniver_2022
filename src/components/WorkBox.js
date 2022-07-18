@@ -4,19 +4,19 @@ import styles from './WorkBox.module.scss';
 
 function WorkBox(props) {
 
-    let [workClick, setWorkClick] = useState(false);
-    const navigate = useNavigate();
+    // let [workClick, setWorkClick] = useState(false);
+    // const navigate = useNavigate();
 
-    useEffect(() => {
-        // console.log(workClick);
-        if(workClick === true) {
-            navigate('/project/'+props.item.idx);
-        }
-    }, [workClick]);
+    // useEffect(() => {
+    //     // console.log(workClick);
+    //     if(workClick === true) {
+    //         navigate('/project/'+props.item.idx);
+    //     }
+    // }, [workClick]);
 
     return (
-        // <div className={`workbox ${styles.workbox}`}>
-        // <div className={`workbox ${styles.workbox}`} onClick={() => {setWorkClick(true)}}>
+        <div className={`workbox ${styles.workbox}`}>
+        {/* <div className={`workbox ${styles.workbox}`} onClick={() => {setWorkClick(true)}}> */}
             <Link to={`/project/${props.item.idx}`} className={styles.logo}>
                 <div className={styles.wrapper}>
                     <div className={styles['item-img']}>
@@ -35,7 +35,8 @@ function WorkBox(props) {
                 ""
                 }
             </Link>
-        // </div>
+        </div>
+
     );
 }
 
