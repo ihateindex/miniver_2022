@@ -47,7 +47,7 @@ function ProjectDetail(props) {
     const otherAnimation = useAnimation();
     async function sequence() {
         await heroAnimation.start({ margin: 0,
-            transition:{delay: 1, duration: 0.5}
+            transition:{delay: 1, duration: 0.5},
          });
         await heroAnimation.start({ padding: 0 });
         await otherAnimation.start({ opacity: 1,

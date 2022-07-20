@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import styles from './WorkBox.module.scss';
+import { changeLoaderState, changeTransitionState } from '../store';
 
 function WorkBox(props) {
 
@@ -15,8 +16,29 @@ function WorkBox(props) {
         
     }, []);
 
+    let transitionState = useSelector((state) => {
+        return state.transitionState;
+    });
+
+    let loaderState = useSelector((state) => {
+        return state.loaderState;
+    });
+
+    let goDetail = () => {
+        dispatch(changeLoaderState('loading'));
+        console.log('워크박스 로더 스테이트:',loaderState);
+    }
+
+    // if(transitionState === 'start') {
+    //     console.log('워크박스 페이지 트랜지션 스테이트:',transitionState);
+    //     dispatch(changeTransitionState('animate'));
+    //     navigate(`/project/${props.item.idx}`)
+    // }
+
+
     return (
-        <Link to={`/project/${props.item.idx}`} className={`workbox ${styles.workbox} ${styles[props.thumb]}`}>
+        // <Link to={`/project/${props.item.idx}`} className={`workbox ${styles.workbox} ${styles[props.thumb]}`}>
+        <div onClick={goDetail} className={`workbox ${styles.workbox} ${styles[props.thumb]}`}>
             <div className={styles.wrapper}>
                 <div className={styles['item-img']}>
                     {props.thumb==='square'
@@ -38,7 +60,8 @@ function WorkBox(props) {
             </div> :
             ""
             }
-        </Link>
+        </div>
+        // </Link>
     );
 }
 
