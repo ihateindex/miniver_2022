@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { changeLoaderState, changeTransitionState } from './../store';
+import { changeLoaderInfo, changeTransitionInfo } from './../store';
 import { useDispatch, useSelector } from 'react-redux';
 // const animationConfiguration = {
 //     // default: { position: 'absolute'},
@@ -24,12 +24,12 @@ import { useDispatch, useSelector } from 'react-redux';
 //     // );
 // };
 function PageTransition(props) {
-    let transitionState = useSelector((state) => {
-        return state.transitionState;
+    let transitionInfo = useSelector((state) => {
+        return state.transitionInfo;
     });
 
-    let loaderState = useSelector((state) => {
-        return state.loaderState;
+    let loaderInfo = useSelector((state) => {
+        return state.loaderInfo;
     });
 
     let dispatch = useDispatch();
@@ -62,9 +62,11 @@ function PageTransition(props) {
     useEffect(() => {
         console.log(props);
         console.log('page transition mount');
-        console.log('페이지 트랜지션 상태', transitionState);
-        if(transitionState === 'initial') {
-            dispatch(changeLoaderState('unLoading'));
+        console.log('페이지 트랜지션 상태', transitionInfo.state);
+        if (transitionInfo.state === 'initial') {
+            // setTimeout(() => {
+            //     // dispatch(changeLoaderInfo({state:'unLoading'}));
+            // }, 6000)
         }
         // ! 맨 처음 마운트 일때만 언로딩으로 변경
         return () => {
@@ -74,7 +76,6 @@ function PageTransition(props) {
         };
     }, []);
     return (
-        // <motion.div variants={animationConfiguration} initial="initial" animate="animate" exit="exit" transition={{ duration: 2 }}>
         <motion.div
             variants={animationConfiguration}
             initial="initial"
@@ -93,7 +94,9 @@ function PageTransition(props) {
                 console.log('페이지 트랜지션 끝');
                 console.log('definition:', definition);
                 // dispatch(changeLoaderState('unLoading'));
-                dispatch(changeLoaderState('unLoading'));
+                // dispatch(changeLoaderInfo({state:'unLoading'}));
+                dispatch(changeTransitionInfo({ state: 'end' }));
+                dispatch(changeLoaderInfo({ state: 'unLoading' }));
                 // console.log(loaderState);
             }}
         >

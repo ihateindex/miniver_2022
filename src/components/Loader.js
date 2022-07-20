@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeLoaderState, changeTransitionState } from './../store';
+import { changeLoaderInfo, changeTransitionInfo } from './../store';
 
 
 
@@ -10,14 +10,16 @@ function Loader(props) {
 
     let dispatch = useDispatch();
 
-    let transitionState = useSelector((state) => {
-        return state.transitionState;
+    let transitionInfo = useSelector((state) => {
+        return state.transitionInfo;
     });
-    console.log(transitionState);
+    console.log(transitionInfo);
 
-    let loaderState = useSelector((state) => {
-        return state.loaderState;
+    let loaderInfo = useSelector((state) => {
+        return state.loaderInfo;
     });
+
+    console.log(loaderInfo);
 
     let loaderConfiguration = {
         // default: { y: '100%'},
@@ -28,18 +30,19 @@ function Loader(props) {
             y: 0,
             // visibility: 'visible',
             transition: {
-                duration: 1,
+                duration: 0.4,
             },
         },
         unLoading: {
             y: '-100%',
             // visibility: 'hidden',
             transition: {
-                duration: 1,
+                duration: 0.4,
             },
         },
     };
     // }
+    
     useEffect(() => {
         // console.log(props);
         // console.log('로더 마운트');
@@ -47,13 +50,24 @@ function Loader(props) {
             // console.log('로더 언마운트');
         };
     }, []);
+
+    useEffect(() => {
+        // console.log(props);
+        // console.log('로더 마운트');
+        if(transitionInfo.state === 'start') {
+            // dispatch(changeLoaderInfo({ state: 'loading' }));
+        }
+        return () => {
+            // console.log('로더 언마운트');
+        };
+    }, [transitionInfo.state]);
     return (
         // <motion.div variants={animationConfiguration} initial="initial" animate="animate" exit="exit" transition={{ duration: 2 }}>
         <>
                 <div className="loader">
                     <motion.div
                         variants={loaderConfiguration}
-                        animate={loaderState}
+                        animate={loaderInfo.state}
                         onAnimationStart={(definition) => {
                             console.log('로더 트랜지션 시작');
                             console.log('definition:', definition);
@@ -61,9 +75,9 @@ function Loader(props) {
                         onAnimationComplete={(definition) => {
                             console.log('로더 트랜지션 끝');
                             console.log('definition:', definition);
-                            console.log(loaderState);
+                            console.log(loaderInfo);
                             if(definition === 'loading') {
-                                dispatch(changeTransitionState('start'));
+                                dispatch(changeTransitionInfo({state:"start", page: loaderInfo.page}));
                             }
                         }}
                         className="loader--bg-slider"

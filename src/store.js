@@ -13,36 +13,42 @@ let themeColor = createSlice ({
 
 export let {changeColor} = themeColor.actions;
 
-let transitionState = createSlice ({
-  name: 'transitionState',
-  initialState: "initial",
+let transitionInfo = createSlice ({
+  name: 'transitionInfo',
+  initialState: {
+    state: "initial",
+    page: ""
+  },
   reducers: {
-      changeTransitionState(state, action) {
+      changeTransitionInfo(state, action) {
           // console.log(state, action.payload);
           return state = action.payload;
       }
   }
 });
 
-export let {changeTransitionState} = transitionState.actions;
+export let {changeTransitionInfo} = transitionInfo.actions;
 
-let loaderState = createSlice ({
+let loaderInfo = createSlice ({
   name: 'loaderState',
-  initialState: "initial",
+  initialState: {
+    state: "initial",
+    page: ""
+  },
   reducers: {
-      changeLoaderState(state, action) {
+      changeLoaderInfo(state, action) {
           // console.log(state, action.payload);
           return state = action.payload;
       }
   }
 });
 
-export let {changeLoaderState} = loaderState.actions;
+export let {changeLoaderInfo} = loaderInfo.actions;
 
 export default configureStore({
   reducer: {
     themeColor: themeColor.reducer,
-    transitionState: transitionState.reducer,
-    loaderState: loaderState.reducer,
+    transitionInfo: transitionInfo.reducer,
+    loaderInfo: loaderInfo.reducer,
   }
 });
