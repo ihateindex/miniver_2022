@@ -27,7 +27,6 @@ function About(props) {
     let themeColor = useSelector((state) => {
         return state.themeColor;
     });
-    console.log(themeColor);
     let dispatch = useDispatch();
 
     let device = useSelector((state) => {
@@ -36,6 +35,7 @@ function About(props) {
 
     const [workList, setWorkList] = useState([]);
     const [activeSlide, setActiveSlide] = useState('development');
+    let [slideRotate, setSlideRotate] = useState((0));
 
     const sliderWrapperRef = useRef(null);
 
@@ -246,8 +246,7 @@ function About(props) {
 
         // * variables
         const slideAngle = 10;
-        const slideWrapperAngle = -10;
-        let lastSlideWrapperAngle = 0;
+        // const slideWrapperAngle = 0;
 
         // * 원형 슬라이드 세팅
         function circularSliderSetting() {
@@ -258,8 +257,9 @@ function About(props) {
 
                 gsap.set($this, { transform: 'rotate(' + slideAngle * index + 'deg)' });
                 $this.dataset.elRotation = slideAngle * index;
+                console.log('hhhhhhhhh');
             }
-            gsap.set('.slide-wrapper', { transform: 'rotate(' + slideWrapperAngle + 'deg)' });
+            gsap.set('.slide-wrapper', { transform: 'rotate(' + slideRotate + 'deg)' });
 
             // * Draggable 세팅
             Draggable.create('.slide-wrapper', {
@@ -277,28 +277,29 @@ function About(props) {
                 onDragStart: function () {},
                 onMove: function () {
                     let direction = this.getDirection();
-                    console.log('움직인 방향', this.getDirection());
-                    console.log('마지막각도', lastSlideWrapperAngle);
+                    // console.log('움직인 방향', this.getDirection());
+                    // console.log('마지막각도', lastSlideWrapperAngle);
                     console.log('로테이트', this.rotation);
-                    console.log('슬라이드 앵글', slideAngle);
-                    console.log('움직인 각도', Math.abs(slideWrapperAngle - this.rotation));
-                    if (Math.abs(slideWrapperAngle - this.rotation) > 5) {
-                        console.log('클론 슬라이드 추가 해야함', direction);
-                        switch (direction) {
-                            case 'clockwise':
-                                // TODO: 시계방향, 제일 첫번째 슬라이드를 맨 마지막 슬라이드 뒤에 붙여야함
-                                console.log('시계방향');
-                                break;
+                    setSlideRotate(this.rotation);
+                    // console.log('슬라이드 앵글', slideAngle);
+                    // console.log('움직인 각도', Math.abs(slideWrapperAngle - this.rotation));
+                    // if (Math.abs(slideWrapperAngle - this.rotation) > 5) {
+                    //     console.log('클론 슬라이드 추가 해야함', direction);
+                    //     switch (direction) {
+                    //         case 'clockwise':
+                    //             // TODO: 시계방향, 제일 첫번째 슬라이드를 맨 마지막 슬라이드 뒤에 붙여야함
+                    //             console.log('시계방향');
+                    //             break;
 
-                            case 'counter-clockwise':
-                                // TODO: 반시계방향, 제일 마지막 슬라이드를 첫번째 슬라이드 얖에 붙여야함
-                                console.log('반시계방향');
-                                break;
+                    //         case 'counter-clockwise':
+                    //             // TODO: 반시계방향, 제일 마지막 슬라이드를 첫번째 슬라이드 얖에 붙여야함
+                    //             console.log('반시계방향');
+                    //             break;
 
-                            default:
-                                break;
-                        }
-                    }
+                    //         default:
+                    //             break;
+                    //     }
+                    // }
                 },
                 onDragEnd: function () {
                     customSnap(this.rotation);
@@ -311,7 +312,6 @@ function About(props) {
         function customSnap(value) {
             let $nextEl = '';
             let snapVal = Math.round(value / slideAngle) * slideAngle;
-            lastSlideWrapperAngle = snapVal;
             let rotaVal = 0;
             gsap.to('.slide-wrapper', { duration: 0.25, rotation: snapVal, ease: 'back.out(1.7)' });
             for (let index = 0; index < sliderWrapperRef.current.children.length; index++) {
@@ -366,49 +366,12 @@ function About(props) {
         });
     };
 
-    let [workCategoryData, setWorkCategoryData] = useState([
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-        'video',
-        'development',
-        'product-manager',
-        'designer',
-    ]);
+    let [workCategoryData, setWorkCategoryData] = useState(['product-manager', 'designer', 'video', 'development', 'product-manager', 'designer', 'video', 'development']);
 
-    function WorkSlide({ workCategory, index }) {
+    function WorkSlide({ workCategory, rotation }) {
         const slideAngle = 10;
         return (
-            <div className={`slide`} data-work-category={workCategory} data-el-rotation={index * slideAngle} style={{ transform: 'rotate(' + index * slideAngle + 'deg)' }}>
+            <div className={`slide`} data-work-category={workCategory} data-el-rotation={rotation} style={{ transform: 'rotate(' + rotation + 'deg)' }}>
                 <div className="card">{/* <div className="desc"></div> */}</div>
             </div>
         );
@@ -567,9 +530,21 @@ function About(props) {
                                                         <div className="slide" data-work-category="designer">
                                                             <div className="card"></div>
                                                         </div> */}
-                                                        {workCategoryData.map((workCategory, index) => (
+                                                        {/* {workCategoryData.map((workCategory, index) => (
                                                             <WorkSlide key={index} index={index} workCategory={workCategory} />
-                                                        ))}
+                                                        ))} */}
+                                                        {50 < slideRotate && slideRotate < 90 ? <WorkSlide workCategory={'product-manager'} rotation={-70}/> : ''}
+                                                        {40 < slideRotate && slideRotate < 80 ? <WorkSlide workCategory={'designer'} rotation={-60}/> : ''}
+                                                        {30 < slideRotate && slideRotate < 70 ? <WorkSlide workCategory={'video'} rotation={-50}/> : ''}
+                                                        {20 < slideRotate && slideRotate < 60 ? <WorkSlide workCategory={'development'} rotation={-40} /> : ''}
+                                                        {10 < slideRotate && slideRotate < 50 ? <WorkSlide workCategory={'product-manager'} rotation={-30}/> : ''}
+                                                        {0 < slideRotate && slideRotate < 40 ? <WorkSlide workCategory={'designer'} rotation={-20}/> : ''}
+                                                        {-10 < slideRotate && slideRotate < 30 ? <WorkSlide workCategory={'video'} rotation={-10}/> : ''}
+                                                        {-20 < slideRotate && slideRotate < 20 ? <WorkSlide workCategory={'development'} rotation={0} /> : ''}
+                                                        {-30 < slideRotate && slideRotate < 10 ? <WorkSlide workCategory={'product-manager'} rotation={10}/> : ''}
+                                                        {-40 < slideRotate && slideRotate < 0 ? <WorkSlide workCategory={'designer'} rotation={20}/> : ''}
+                                                        {-50 < slideRotate && slideRotate < -10 ? <WorkSlide workCategory={'video'} rotation={30}/> : ''}
+                                                        {-60 < slideRotate && slideRotate < -20 ? <WorkSlide workCategory={'development'} rotation={40}/> : ''}
                                                     </div>
                                                 </div>
                                             </div>
